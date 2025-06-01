@@ -88,9 +88,9 @@ Classifier guidance enhances diffusion models by incorporating class-conditional
 ### 3. DDIM Sampling
 
 ** DDIM Sample 20 steps **:
-[20 step DDIM results](./ddim_samples_20_steps.png)
-[50 step DDIM results](./ddim_samples_50_steps.png)
-[100 step DDIM results](./ddim_samples_100_steps.png)
+![20 step DDIM results](./ddim_samples_20_steps.png)
+![50 step DDIM results](./ddim_samples_50_steps.png)
+![100 step DDIM results](./ddim_samples_100_steps.png)
 
 
 ### 4. Knowledge Distillation
