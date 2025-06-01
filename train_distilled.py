@@ -97,7 +97,7 @@ def main():
         learning_rate=1e-4,
         save_path='checkpoints/distilled_model',
         log_interval=50,
-        save_interval=10,
+        save_interval=5,
         start_epoch=start_epoch,
         optimizer=optimizer
     )

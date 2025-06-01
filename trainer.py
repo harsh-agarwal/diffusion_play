@@ -154,7 +154,7 @@ class DistillationTrainer:
                         )
                     
                     # Log sample images periodically
-                    if batch_idx % (log_interval) == 0:
+                    if batch_idx % (log_interval*5) == 0:
                         with torch.no_grad():
                             print("running evals to send into logs")
                             # Get a noisy version of current batch
