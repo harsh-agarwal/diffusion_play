@@ -41,6 +41,7 @@ python src_cfg.py
 python train_distilled.py
 ```
 
+Note: Distillation is very slow, and it took me a few days to get this up and running to see anything meaningful. Suggestions are more than welcome here! 
 
 
 ## Detailed Guide
