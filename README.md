@@ -7,6 +7,7 @@ This repository provides a hands-on tutorial and guide to fundamental concepts i
 ### Key Features
 - **Basic Diffusion Model**: Train a simple diffusion model on MNIST data from scratch
 - **Classifier Guidance**: Implement classifier-guided generation to produce class-specific samples
+- **DDIM Sampling**: Basic implementation of DDIM sampling and some ablation on number of steps to see the results.
 - **Knowledge Distillation**: Distill a 1000-step diffusion model into a single-step variant
 
 All experiments have been tested locally on Mac hardware and basic AWS GPU instances. The code is designed to be accessible for various hardware configurations, though H100/A100 GPUs will significantly accelerate training.
@@ -96,7 +97,6 @@ Classifier guidance enhances diffusion models by incorporating class-conditional
 ![50 step DDIM results](./ddim_samples_50_steps.png)
 
 **DDIM Sample 100 steps**:
-
 
 ![100 step DDIM results](./ddim_samples_100_steps.png)
 
