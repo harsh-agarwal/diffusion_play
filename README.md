@@ -94,7 +94,7 @@ Classifier guidance enhances diffusion models by incorporating class-conditional
 
 
 ### 4. Knowledge Distillation
-Transform a multi-step diffusion process into a single-step model while preserving generation quality. I wasn't able to get something impressive here, I am still trying but this is the checkpoint that i have after 35 epochs. [checkpoint](drive_link_to_add)
+Transform a multi-step diffusion process into a single-step model while preserving generation quality. I wasn't able to get something impressive here, I am still trying but this is the checkpoint that i have after 35 epochs. [checkpoint](https://drive.google.com/file/d/18xN60F-bS0_rxatPkevdq91kjWNVMut9/view?usp=sharing)
 
 ## Contributing
 Encountered an issue or have suggestions? Please create an issue or reach out directly. Contributions and feedback are welcome!
