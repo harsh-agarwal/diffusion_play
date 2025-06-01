@@ -9,10 +9,25 @@ from trainer import DistillationTrainer
 import sys
 sys.path.append('..')
 from models import DiffusionWrapper
+import glob 
 
 # Check if MPS is available
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+# device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print(f"Using device: {device}")
+
+def get_latest_checkpoint():
+    """Find the latest checkpoint in the checkpoints directory"""
+    checkpoints = glob.glob('checkpoints/distilled_model_epoch_*.pt')
+    if not checkpoints:
+        return None
+    
+    # Extract epoch numbers and find the latest
+    epochs = [int(ckpt.split('_epoch_')[-1].split('.')[0]) for ckpt in checkpoints]
+    latest_idx = epochs.index(max(epochs))
+    return checkpoints[latest_idx]
+
+
 
 def main():
     # Create output directories
@@ -22,14 +37,29 @@ def main():
     # Load the teacher model
     print("Loading teacher model...")
     teacher_wrapper = DiffusionWrapper(device)
-    teacher_wrapper.load_model('../transformer_diffusion_logs/diffusion_model_final.pt')  # Load your trained model
+    teacher_wrapper.load_model('./train_runs_diffusion/diffusion_model_final.pt')  # Load your trained model
     teacher_model = teacher_wrapper.get_model()
     teacher_model.eval()  # Set to eval mode
     
     # Create student model
     print("Creating student model...")
     student_model = SingleStepUNet().to(device)
+
+    # Initialize optimizer
+    optimizer = torch.optim.Adam(student_model.parameters(), lr=1e-4)
+    start_epoch = 0
     
+    # Check for existing checkpoint
+    latest_checkpoint = get_latest_checkpoint()
+    if latest_checkpoint:
+        print(f"Found checkpoint: {latest_checkpoint}")
+        checkpoint = torch.load(latest_checkpoint)
+        student_model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        start_epoch = checkpoint['epoch'] + 1
+        print(f"Resuming from epoch {start_epoch}")
+
+
     # Data loading
     print("Setting up data...")
     transform = transforms.Compose([
@@ -40,11 +70,13 @@ def main():
     dataset = datasets.MNIST(root='../data', train=True, download=True, transform=transform)
     dataloader = DataLoader(
         dataset,
-        batch_size=64,  # Smaller batch size for better stability
+        batch_size=256,  # Smaller batch size for better stability
         shuffle=True,
-        num_workers=2,
+        num_workers=8,
         pin_memory=True
     )
+
+    
     
     # Initialize trainer
     print("Initializing trainer...")
@@ -65,7 +97,9 @@ def main():
         learning_rate=1e-4,
         save_path='checkpoints/distilled_model',
         log_interval=50,
-        save_interval=10
+        save_interval=10,
+        start_epoch=start_epoch,
+        optimizer=optimizer
     )
     
     # Generate comparison samples

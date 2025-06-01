@@ -9,14 +9,16 @@ from torch.utils.tensorboard import SummaryWriter
 from models import DiffusionWrapper
 
 # Check if MPS is available
-device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+
+# device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # Hyperparameters
 n_steps = 1000
 beta_start = 0.0001
 beta_end = 0.02
-batch_size = 128
+batch_size = 1024
 n_epochs = 100
 learning_rate = 2e-4
 

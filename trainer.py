@@ -121,13 +121,16 @@ class DistillationTrainer:
         learning_rate,
         save_path,
         log_interval=100,
-        save_interval=5
+        save_interval=5,
+        start_epoch = 0,
+        optimizer = None
     ):
         """Full training loop"""
         writer = SummaryWriter('runs/distillation')
-        optimizer = torch.optim.Adam(self.student.parameters(), lr=learning_rate)
+        if optimizer is None:
+            optimizer = torch.optim.Adam(self.student.parameters(), lr=learning_rate)
         
-        for epoch in range(n_epochs):
+        for epoch in range(start_epoch, start_epoch + n_epochs):
             epoch_losses = {'total': 0, 'main': 0, 'progressive': 0, 'clean': 0}
             
             for batch_idx, (images, _) in enumerate(train_dataloader):
@@ -140,6 +143,7 @@ class DistillationTrainer:
                 
                 # Logging
                 if batch_idx % log_interval == 0:
+                    print("i am here and i am writing into logs.")
                     print(f"Epoch {epoch+1}, Batch {batch_idx}")
                     for k, v in losses.items():
                         print(f"{k}: {v:.4f}")
@@ -150,8 +154,9 @@ class DistillationTrainer:
                         )
                     
                     # Log sample images periodically
-                    if batch_idx % (log_interval * 5) == 0:
+                    if batch_idx % (log_interval) == 0:
                         with torch.no_grad():
+                            print("running evals to send into logs")
                             # Get a noisy version of current batch
                             t_vis = (torch.ones(8, device=self.device) * (self.n_steps - 1)).long()
                             noisy_vis, _ = self.get_noisy_image(images[:8], t_vis)
