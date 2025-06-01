@@ -35,7 +35,15 @@ Once tyrained you will see a checkpoint "diffusion_model_final.pt" that will get
 python src_cfg.py
 ```
 
-#### 3. Distillation 
+#### 3. DDIM Sampling
+
+```bash
+python sample_ddim.py
+```
+
+This script will load the trained diffusion model checkpoint but will run DDIM sampling method on top of it. 
+
+#### 4. Distillation 
 
 ```bash
 python train_distilled.py
@@ -77,8 +85,16 @@ Classifier guidance enhances diffusion models by incorporating class-conditional
 
 **Observation**: Higher guidance scales (8.0) produce stronger class conditioning but may occasionally lead to over-optimization artifacts.
 
-### 3. Knowledge Distillation
-Transform a multi-step diffusion process into a single-step model while preserving generation quality.
+### 3. DDIM Sampling
+
+** DDIM Sample 20 steps **:
+[20 step DDIM results](./ddim_samples_20_steps.png)
+[50 step DDIM results](./ddim_samples_50_steps.png)
+[100 step DDIM results](./ddim_samples_100_steps.png)
+
+
+### 4. Knowledge Distillation
+Transform a multi-step diffusion process into a single-step model while preserving generation quality. I wasn't able to get something impressive here, I am still trying but this is the checkpoint that i have after 35 epochs. [checkpoint](drive_link_to_add)
 
 ## Contributing
 Encountered an issue or have suggestions? Please create an issue or reach out directly. Contributions and feedback are welcome!
