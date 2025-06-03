@@ -226,7 +226,7 @@ class ConsistencyTrainer:
         train_loader,
         n_epochs,
         learning_rate=1e-4,
-        save_interval=5,
+        save_interval=500,
         log_dir='runs/consistency'
     ):
         optimizer = torch.optim.Adam(self.student.parameters(), lr=learning_rate)
@@ -292,7 +292,7 @@ def train_consistency_model():
     # Load the pre-trained diffusion model
     print("Loading teacher model...")
     teacher_wrapper = DiffusionWrapper(device)
-    checkpoint = torch.load('./diffusion_model_final.pt', map_location=device)
+    checkpoint = torch.load('./train_runs_diffusion/diffusion_model_final.pt', map_location=device)
     teacher_wrapper.model.load_state_dict(checkpoint['model_state_dict'])
     teacher_model = teacher_wrapper.get_model()
     teacher_model.eval()
@@ -311,9 +311,9 @@ def train_consistency_model():
     dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
     train_loader = DataLoader(
         dataset,
-        batch_size=128,
+        batch_size=1024,
         shuffle=True,
-        num_workers=4,
+        num_workers=8,
         pin_memory=True
     )
     
@@ -329,7 +329,7 @@ def train_consistency_model():
     print("Starting consistency training...")
     trainer.train(
         train_loader=train_loader,
-        n_epochs=50,
+        n_epochs=5000,
         learning_rate=1e-4,
         save_interval=5
     )
