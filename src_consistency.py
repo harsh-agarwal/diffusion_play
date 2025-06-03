@@ -145,7 +145,7 @@ class ConsistencyTrainer:
         student_model,
         n_steps=1000,
         sigma_min=0.002,
-        sigma_max=80.0,
+        sigma_max=1.0,
         rho=7.0,
         device=device
     ):
@@ -214,9 +214,9 @@ class ConsistencyTrainer:
         
         # Combine losses with weights
         total_loss = (
-            0.5 * teacher_loss +    # Match teacher
+            0.7 * teacher_loss +    # Match teacher
             0.3 * consistency_loss + # Be consistent
-            0.2 * clean_loss        # Predict clean images
+            0.0 * clean_loss        # made clean loss zero to dbug things better 
         )
         
         return total_loss
